@@ -25,5 +25,4 @@ app.post("/", (req, res) => {
 
 // ⛔️ Don't use app.listen()
 // ✅ Export handler instead
-module.exports = app;
 module.exports.handler = serverless(app);
