@@ -1,11 +1,11 @@
-// index.js
 const express = require("express");
 const serverless = require("serverless-http");
 const cors = require("cors");
 
 const app = express();
 
-app.use(cors({ origin: true, credentials: true }));
+// ✅ Use express built-in parsers
+app.use(cors({ origin: '*', credentials: true }));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -15,6 +15,9 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
     const { name, email, message } = req.body;
+    if (!name || !email || !message) {
+        return res.status(400).json({ success: false, error: "Missing fields" });
+    }
 
     res.status(200).json({
         success: true,
@@ -23,6 +26,5 @@ app.post("/", (req, res) => {
     });
 });
 
-// ⛔️ Don't use app.listen()
-// ✅ Export handler instead
+// ❌ No app.listen() — Vercel uses this export
 module.exports.handler = serverless(app);
