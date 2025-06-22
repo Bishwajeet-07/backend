@@ -1,29 +1,8 @@
-// index.js
-const express = require("express");
-const serverless = require("serverless-http");
-const cors = require("cors");
+const app = require("./api/contact");
 
-const app = express();
 
-app.use(cors({ origin: true, credentials: true }));
-app.use(express.json());
-app.use(express.urlencoded({ extended: true }));
+const PORT = process.env.PORT || 5000;
 
-app.get("/", (req, res) => {
-    res.send("🟢 Contact API is running!");
+app.listen(PORT, () => {
+    console.log(`Server running at http://localhost:${PORT}`);
 });
-
-app.post("/", (req, res) => {
-    const { name, email, message } = req.body;
-
-    res.status(200).json({
-        success: true,
-        message: "Message received successfully",
-        data: { name, email, message },
-    });
-});
-
-// ⛔️ Don't use app.listen()
-// ✅ Export handler instead
-module.exports = app;
-module.exports.handler = serverless(app);
