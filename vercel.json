@@ -2,8 +2,22 @@
     "version": 2,
     "builds": [
         {
+            "src": "client/package.json",
+            "use": "@vercel/static-build"
+        },
+        {
             "src": "api/contact.js",
             "use": "@vercel/node"
+        }
+    ],
+    "routes": [
+        {
+            "src": "/api/(.*)",
+            "dest": "/api/contact.js"
+        },
+        {
+            "src": "/(.*)",
+            "dest": "/client/$1"
         }
     ]
 }

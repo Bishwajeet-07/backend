@@ -1,9 +1,13 @@
 const express = require("express");
-const serverless = require("serverless-http");
-
 const app = express();
+app.use(cors({
+    origin: true, // Allow all origins in development
+    credentials: true,
+}));
 
 app.use(express.json());
+app.use(bodyParser.urlencoded({ extended: true }));
+
 
 app.get("/", (req, res) => {
     res.send("🟢 Contact API is running!");
@@ -11,8 +15,13 @@ app.get("/", (req, res) => {
 
 app.post("/", (req, res) => {
     const { name, email, message } = req.body;
-    res.status(200).json({ success: true, name, email, message });
+
+    // Add your email logic here using nodemailer
+    res.status(200).json({
+        success: true,
+        message: "Message received successfully",
+        data: { name, email, message }
+    });
 });
 
-// 👇 REQUIRED: This is how Vercel uses the route
-module.exports.handler = serverless(app);
+module.exports = app; // 👈 REQUIRED FOR VERCEL
